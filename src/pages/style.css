@@ -1,0 +1,197 @@
+/* public/styles.css */
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --success-color: #2ecc71;
+    --danger-color: #e74c3c;
+    --warning-color: #f39c12;
+    --light-color: #ecf0f1;
+    --dark-color: #34495e;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    background-color: #f5f7fa;
+    color: var(--dark-color);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h1 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: var(--secondary-color);
+    font-size: 1.1rem;
+}
+
+/* Status Section */
+.status-section {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+@media (min-width: 768px) {
+    .status-section {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.status-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+}
+
+.status-card h2 {
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+    text-align: center;
+    border-bottom: 2px solid var(--light-color);
+    padding-bottom: 10px;
+}
+
+/* Availability Display */
+.availability-display {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+
+.count-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.count-display span:first-child {
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.count-label {
+    font-size: 1.2rem;
+    color: var(--secondary-color);
+}
+
+/* Parking Slots */
+.slots-container {
+    margin-top: 20px;
+}
+
+.slots-container h3 {
+    margin-bottom: 15px;
+    color: var(--secondary-color);
+}
+
+.parking-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.slot {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--light-color);
+    border-radius: 6px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.slot.available {
+    background-color: var(--success-color);
+}
+
+.slot.occupied {
+    background-color: var(--danger-color);
+}
+
+/* Gate Status */
+.gate-status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.gate-indicator {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    background-color: var(--danger-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.gate-indicator.open {
+    background-color: var(--success-color);
+}
+
+#gate-status-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+}
+
+.gate-info {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+/* Footer */
+footer {
+    margin-top: 40px;
+    text-align: center;
+    padding: 20px;
+    background-color: var(--light-color);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.admin-link:hover {
+    text-decoration: underline;
+}
+
