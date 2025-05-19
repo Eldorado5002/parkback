@@ -8,9 +8,7 @@ export default function Index() {
   const [availableSlots, setAvailableSlots] = useState(0);
   const [totalSlots] = useState(6);
   const [gateStatus, setGateStatus] = useState("CLOSED");
-  const [deviceStatus, setDeviceStatus] = useState("OFFLINE");
   const [freeSlotsList, setFreeSlotsList] = useState([]);
-  const [occupiedSlotsList, setOccupiedSlotsList] = useState([1, 2, 3, 4, 5, 6]);
   const [isSystemOnline, setIsSystemOnline] = useState(false);
 
   useEffect(() => {
@@ -25,17 +23,11 @@ export default function Index() {
       if (data === "FULL") {
         setAvailableSlots(0);
         setFreeSlotsList([]);
-        setOccupiedSlotsList([1, 2, 3, 4, 5, 6]);
       } else {
         // Parse comma-separated list of available slots
         const freeSlots = data.split(",").map(Number);
         setFreeSlotsList(freeSlots);
         setAvailableSlots(freeSlots.length);
-        
-        // Calculate occupied slots
-        const occupied = Array.from({length: totalSlots}, (_, i) => i + 1)
-          .filter(slot => !freeSlots.includes(slot));
-        setOccupiedSlotsList(occupied);
       }
     });
     
@@ -48,7 +40,6 @@ export default function Index() {
     const unsubscribeDevice = socketService.subscribeToDeviceStatus((data) => {
       setIsSystemOnline(true); // Mark system as online when any data is received
       console.log("Device status update:", data);
-      setDeviceStatus(data);
     });
     
     // Cleanup subscriptions on component unmount

@@ -8,7 +8,9 @@ const path = require('path');
 
 const app = express();
 app.use(cors());
-app.use(express.static(path.join(__dirname, 'build')));
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'client', 'build')));
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -21,9 +23,8 @@ const io = new Server(server, {
 // MQTT client setup
 const MQTT_BROKER = 'broker.hivemq.com';
 const MQTT_PORT = 1883;
-const TOPIC_PREFIX = 'parking_system_custom_123456/'; // Match the ESP32 topic prefix
+const TOPIC_PREFIX = 'parking_system_custom_123456/';
 
-// MQTT Topics (same as on ESP32)
 const TOPIC_PUB_SLOT = TOPIC_PREFIX + 'slot_status';
 const TOPIC_PUB_GATE_STATUS = TOPIC_PREFIX + 'gate_status';
 const TOPIC_SUB_VEHICLE = TOPIC_PREFIX + 'vehicle_status';
@@ -35,8 +36,7 @@ const mqttClient = mqtt.connect(`mqtt://${MQTT_BROKER}:${MQTT_PORT}`);
 
 mqttClient.on('connect', () => {
   console.log('Connected to MQTT broker');
-  
-  // Subscribe to topics published by the ESP32
+
   mqttClient.subscribe(TOPIC_PUB_SLOT);
   mqttClient.subscribe(TOPIC_PUB_GATE_STATUS);
   mqttClient.subscribe(TOPIC_DEVICE_STATUS);
@@ -45,31 +45,28 @@ mqttClient.on('connect', () => {
 // WebSocket connections
 io.on('connection', (socket) => {
   console.log('Client connected:', socket.id);
-  
-  // Handle gate control commands from frontend
+
   socket.on('control_gate', (action) => {
     console.log('Gate control:', action);
-    mqttClient.publish(TOPIC_SUB_GATE, action); // Forward command to ESP32
+    mqttClient.publish(TOPIC_SUB_GATE, action);
   });
-  
-  // Handle vehicle detection simulations from frontend
+
   socket.on('simulate_vehicle', (status) => {
     console.log('Vehicle simulation:', status);
-    mqttClient.publish(TOPIC_SUB_VEHICLE, status); // Forward to ESP32
+    mqttClient.publish(TOPIC_SUB_VEHICLE, status);
   });
-  
+
   socket.on('disconnect', () => {
     console.log('Client disconnected:', socket.id);
   });
 });
 
-// Handle MQTT messages from ESP32 and broadcast to WebSocket clients
+// Handle MQTT messages
 mqttClient.on('message', (topic, message) => {
   try {
     const messageStr = message.toString();
     console.log(`MQTT message: ${topic} -> ${messageStr}`);
-    
-    // Forward the message to all connected WebSocket clients
+
     if (topic === TOPIC_PUB_SLOT) {
       io.emit('slot_update', messageStr);
     } else if (topic === TOPIC_PUB_GATE_STATUS) {
@@ -82,9 +79,9 @@ mqttClient.on('message', (topic, message) => {
   }
 });
 
-// Serve React app for any other routes
+// React app fallback route
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;
