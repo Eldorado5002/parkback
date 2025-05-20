@@ -10,6 +10,7 @@ export default function Index() {
   const [gateStatus, setGateStatus] = useState("CLOSED");
   const [freeSlotsList, setFreeSlotsList] = useState([]);
   const [isSystemOnline, setIsSystemOnline] = useState(false);
+  const [showWelcomePopup, setShowWelcomePopup] = useState(true);
 
   useEffect(() => {
     console.log("Index page loaded");
@@ -57,6 +58,25 @@ export default function Index() {
 
   return (
     <div className="container">
+      {/* Welcome Popup */}
+      {showWelcomePopup && (
+        <>
+          <div className="overlay" onClick={() => setShowWelcomePopup(false)} />
+          <div className="welcome-popup">
+            <h2>Welcome to the Intelligent Urban Parking System</h2>
+            <div className="system-status">
+              <div className={`status-indicator ${isSystemOnline ? 'online' : 'offline'}`}>
+                <span className={`status-dot ${isSystemOnline ? 'online' : 'offline'}`}></span>
+                System {isSystemOnline ? 'Online' : 'Offline'}
+              </div>
+            </div>
+            <button className="close-button" onClick={() => setShowWelcomePopup(false)}>
+              Get Started
+            </button>
+          </div>
+        </>
+      )}
+
       <header>
         <h1>Smart Parking System</h1>
         <p className="subtitle">Real-time parking lot monitoring</p>
